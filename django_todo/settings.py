@@ -15,19 +15,19 @@ from pathlib import Path
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'lek&-8x7rjcjtlg5gkg6j-59)8fzd07nzu_!_t_k986#*cr_h('
+SECRET_KEY = os.environ.get('SECRET_KEY', 'lek&-8x7rjcjtlg5gkg6j-59)8fzd07nzu_!_t_k986#*cr_h(')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['aoifem-django-todo.herokuapp.com']
+ALLOWED_HOSTS =[os.environ.get('HEROKU_HOSTNAME')]
 
 
 # Application definition
@@ -83,12 +83,12 @@ WSGI_APPLICATION = 'django_todo.wsgi.application'
 #     }
 # }
 
-db_config = dj_database_url.config(default='postgres://grbuikrhlsusdr:3f08de755b069d0b0307db464de2b50a97044daa2f693ce5066f2f7ece826e50@ec2-34-224-254-126.compute-1.amazonaws.com:5432/d6hvd7kchdsm63')
+
+db_config = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
