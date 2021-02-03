@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-from dj_database_url import dj_database_url
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,18 +76,18 @@ WSGI_APPLICATION = 'django_todo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
+db_config = dj_database_url.config(default='postgres://grbuikrhlsusdr:3f08de755b069d0b0307db464de2b50a97044daa2f693ce5066f2f7ece826e50@ec2-34-224-254-126.compute-1.amazonaws.com:5432/d6hvd7kchdsm63')
+db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
-    'default': dj_database_url_parse('postgres://woefklscjluiun:f6bc88e957280a06459abd9f70d89d859b353dc6e4cf3486e7c9e278749f8fe1@ec2-34-248-148-63.eu-west-1.compute.amazonaws.com:5432/d70afgsqvi5ee4')
-    }
+    'default': db_config,
 }
-
 
 
 # Password validation
