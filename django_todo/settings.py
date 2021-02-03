@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 import dj_database_url
 
+development = os.environ.get('DEVELOPMENT', False)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,9 +27,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'lek&-8x7rjcjtlg5gkg6j-59)8fzd07nzu_!_t_k986#*cr_h(')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = development
 
-ALLOWED_HOSTS =[os.environ.get('HEROKU_HOSTNAME')]
+if development:
+    ALLOWED_HOSTS =['localhost']
+else: 
+    ALLOWED_HOSTS =[os.environ.get('HEROKU_HOSTNAME')]
 
 
 # Application definition
@@ -72,23 +77,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_todo.wsgi.application'
 
+if development:
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
-db_config = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-db_config['ATOMIC_REQUESTS'] = True
-DATABASES = {
-    'default': db_config,
-}
+    db_config = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    db_config['ATOMIC_REQUESTS'] = True
+    DATABASES = {
+        'default': db_config,
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
